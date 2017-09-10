@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lab1
 {
-    class DynamicList<T>
+    class DynamicList<T>:IEnumerable<T>
     {
         private T[] array = new T[0];
         public object this[int index]
@@ -43,11 +44,19 @@ namespace Lab1
             }
             return false;
         }
-        public bool Remove(T element)
+        public void Remove(T element)
         {
-            return false;
+            var i = 0;
+            foreach (var item in array)
+            {
+                if (Equals(item, element))
+                {
+                    RemoveAt(i);
+                }
+                i++;
+            }
         }
-        public bool RemoveAt(int index)
+        public bool RemoveAt(long index)
         {
             if (!(index < 0 || index >= Count))
             {
@@ -73,7 +82,15 @@ namespace Lab1
             array = null;
             Count = 0;
         }
+        public IEnumerator<T> GetEnumerator()
+        {
+            return array.Take(Count).GetEnumerator();
+        }
 
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
     class Program
     {
